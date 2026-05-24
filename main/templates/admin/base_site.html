@@ -1,0 +1,189 @@
+{% extends "admin/base.html" %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="/admin/">
+        🚖 SmartTaxi Control Panel
+    </a>
+</h1>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<style>
+
+:root{
+    --bg:#0b1120;
+    --card:#111827;
+    --card2:#1f2937;
+    --blue:#38bdf8;
+    --text:#f8fafc;
+}
+
+body,
+#container,
+#content,
+#content-main{
+    background:var(--bg) !important;
+    color:var(--text) !important;
+}
+
+/* HEADER */
+
+#header{
+    background:linear-gradient(
+        90deg,
+        #111827,
+        #0f172a
+    ) !important;
+
+    border-bottom:2px solid var(--blue);
+    height:70px;
+}
+
+#site-name a{
+    color:var(--blue) !important;
+    font-size:32px !important;
+    font-weight:800 !important;
+    text-decoration:none !important;
+    letter-spacing:1px;
+}
+
+/* CARDS */
+
+.module{
+    background:var(--card) !important;
+    border:none !important;
+    border-radius:22px !important;
+    overflow:hidden !important;
+    margin-bottom:25px !important;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.4) !important;
+
+    transition:0.3s;
+}
+
+.module:hover{
+    transform:translateY(-3px);
+}
+
+/* TITLES */
+
+.module h2,
+.module caption{
+
+    background:linear-gradient(
+        90deg,
+        #0ea5e9,
+        #38bdf8
+    ) !important;
+
+    color:white !important;
+    padding:16px !important;
+    font-size:18px !important;
+    font-weight:bold !important;
+}
+
+/* TABLE */
+
+table{
+    background:var(--card2) !important;
+}
+
+td,
+th{
+    border-color:#334155 !important;
+    color:white !important;
+    padding:14px !important;
+}
+
+/* LINKS */
+
+a{
+    color:var(--blue) !important;
+    text-decoration:none !important;
+    transition:0.2s;
+}
+
+a:hover{
+    color:white !important;
+}
+
+/* BUTTONS */
+
+.button,
+input[type=submit],
+.submit-row input{
+
+    background:linear-gradient(
+        90deg,
+        #0ea5e9,
+        #38bdf8
+    ) !important;
+
+    border:none !important;
+    border-radius:14px !important;
+    color:white !important;
+
+    padding:12px 20px !important;
+    font-weight:bold !important;
+
+    transition:0.3s;
+}
+
+.button:hover,
+input[type=submit]:hover{
+    transform:scale(1.05);
+}
+
+/* SIDEBAR */
+
+#nav-sidebar{
+    background:#111827 !important;
+    border-right:1px solid #1e293b !important;
+}
+
+#nav-sidebar a{
+    color:white !important;
+}
+
+/* BREADCRUMB */
+
+.breadcrumbs{
+    background:#111827 !important;
+    border:none !important;
+    color:white !important;
+}
+
+/* CONTENT */
+
+#content{
+    padding:30px !important;
+}
+
+.dashboard #content{
+    width:100%;
+}
+
+/* RECENT ACTIONS */
+
+#recent-actions-module{
+    background:#111827 !important;
+}
+
+/* SCROLL */
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#38bdf8;
+    border-radius:20px;
+}
+
+</style>
+
+{% endblock %}

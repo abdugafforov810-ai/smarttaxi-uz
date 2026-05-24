@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>🚖 SmartTaxi UZ</title>
+    <title>🚖 SmartTaxi Premium</title>
 
     <style>
 
@@ -16,95 +16,155 @@
             margin:0;
             padding:0;
             box-sizing:border-box;
-            font-family:Arial;
+            font-family:Arial,sans-serif;
         }
 
         body{
-            display:flex;
-            background:#0f172a;
+            background:#0b1120;
             color:white;
+            overflow-x:hidden;
         }
 
         .sidebar{
-            width:360px;
+
+            position:fixed;
+
+            left:0;
+            top:0;
+
+            width:340px;
             height:100vh;
-            overflow-y:auto;
+
             background:#111827;
-            padding:20px;
+
+            padding:25px;
+
+            overflow-y:auto;
+
+            z-index:1000;
         }
 
-        .title{
-            font-size:30px;
+        .logo{
+
+            font-size:34px;
+            font-weight:bold;
+
+            margin-bottom:25px;
+
             color:#38bdf8;
-            margin-bottom:20px;
         }
 
         .card{
+
             background:#1e293b;
-            padding:20px;
-            border-radius:20px;
+
+            border-radius:24px;
+
+            padding:22px;
+
             margin-bottom:20px;
+
+            animation:fade 0.5s ease;
+        }
+
+        .card h2{
+            margin-bottom:15px;
         }
 
         .number{
-            font-size:32px;
+
+            font-size:42px;
             font-weight:bold;
-            margin-top:10px;
+            color:#38bdf8;
         }
 
         input,
         select{
+
             width:100%;
-            padding:12px;
-            margin-top:10px;
+
+            margin-top:12px;
+
+            padding:15px;
+
             border:none;
-            border-radius:12px;
-            outline:none;
+
+            border-radius:16px;
+
             background:#334155;
+
             color:white;
+
+            outline:none;
         }
 
         button{
+
             width:100%;
-            padding:12px;
-            margin-top:10px;
+
+            margin-top:15px;
+
+            padding:15px;
+
             border:none;
-            border-radius:12px;
-            background:#38bdf8;
-            color:white;
+
+            border-radius:18px;
+
             cursor:pointer;
+
             font-size:16px;
+
+            font-weight:bold;
+
+            color:white;
+
+            background:#38bdf8;
+
+            transition:0.3s;
         }
 
         button:hover{
-            background:#0ea5e9;
-        }
 
-        .buyurtma{
-            background:#334155;
-            padding:12px;
-            border-radius:14px;
-            margin-top:12px;
+            transform:translateY(-3px);
+
+            box-shadow:
+            0 10px 30px rgba(56,189,248,0.5);
         }
 
         #map{
-            flex:1;
+
+            margin-left:340px;
+
+            width:calc(100% - 340px);
+
             height:100vh;
         }
 
-        @media(max-width:900px){
+        .buyurtma{
 
-            body{
-                flex-direction:column;
+            background:#334155;
+
+            border-radius:18px;
+
+            padding:15px;
+
+            margin-top:15px;
+        }
+
+        .buyurtma p{
+            margin-top:8px;
+        }
+
+        @keyframes fade{
+
+            from{
+                opacity:0;
+                transform:translateY(20px);
             }
 
-            .sidebar{
-                width:100%;
-                height:auto;
-            }
-
-            #map{
-                height:70vh;
+            to{
+                opacity:1;
+                transform:translateY(0);
             }
 
         }
@@ -117,13 +177,9 @@
 
 <div class="sidebar">
 
-    <h1 class="title">
-        🚖 SmartTaxi UZ
-    </h1>
-
-    <button onclick="changeTheme()">
-        🌙 Theme
-    </button>
+    <div class="logo">
+        🚖 SmartTaxi
+    </div>
 
     <div class="card">
 
@@ -179,10 +235,6 @@
                 Chorsu
             </option>
 
-            <option value="Tashkent City">
-                Tashkent City
-            </option>
-
         </select>
 
         <select id="to">
@@ -191,29 +243,25 @@
                 🏁 Qayerga
             </option>
 
-            <option value="Magic City">
-                Magic City
-            </option>
-
-            <option value="Chorsu">
-                Chorsu
-            </option>
-
             <option value="Tashkent City">
                 Tashkent City
+            </option>
+
+            <option value="Airport">
+                Airport
             </option>
 
         </select>
 
         <button onclick="createOrder()">
-            🚖 Buyurtma
+            🚖 Buyurtma berish
         </button>
 
     </div>
 
     <div class="card">
 
-        <h2>📋 Jonli Buyurtmalar</h2>
+        <h2>📋 Jonli buyurtmalar</h2>
 
         <div id="orders"></div>
 
@@ -229,12 +277,6 @@
 
     let markers = {};
 
-    let directionsService;
-
-    let directionsRenderer;
-
-    let darkMode = true;
-
     async function initMap(){
 
         map = new google.maps.Map(
@@ -248,56 +290,11 @@
                 center:{
                     lat:41.3111,
                     lng:69.2797
-                },
-
-                styles:[
-
-                    {
-                        "elementType":"geometry",
-                        "stylers":[
-                            {
-                                "color":"#0f172a"
-                            }
-                        ]
-                    },
-
-                    {
-                        "elementType":"labels.text.fill",
-                        "stylers":[
-                            {
-                                "color":"#38bdf8"
-                            }
-                        ]
-                    },
-
-                    {
-                        "featureType":"road",
-                        "elementType":"geometry",
-                        "stylers":[
-                            {
-                                "color":"#1e293b"
-                            }
-                        ]
-                    }
-
-                ]
+                }
 
             }
 
         );
-
-        const trafficLayer =
-            new google.maps.TrafficLayer();
-
-        trafficLayer.setMap(map);
-
-        directionsService =
-            new google.maps.DirectionsService();
-
-        directionsRenderer =
-            new google.maps.DirectionsRenderer();
-
-        directionsRenderer.setMap(map);
 
         loadDrivers();
 
@@ -332,12 +329,14 @@
 
             if(markers[driver.id]){
 
-                markers[driver.id]
-                    .setPosition(position);
+                smoothMoveMarker(
+                    markers[driver.id],
+                    position
+                );
 
             }else{
 
-                const marker =
+                markers[driver.id] =
                     new google.maps.Marker({
 
                     position:position,
@@ -355,76 +354,53 @@
 
                 });
 
-                const infoWindow =
-                    new google.maps.InfoWindow({
-
-                    content:`
-
-                    <div style="
-                        width:240px;
-                        padding:10px;
-                        color:black;
-                    ">
-
-                        <img
-                            src="${driver.photo}"
-                            width="100%"
-                            height="140"
-                            style="
-                                object-fit:cover;
-                                border-radius:16px;
-                            "
-                        >
-
-                        <h2>
-                            🚖 ${driver.name}
-                        </h2>
-
-                        <p>
-                            🚘 ${driver.car_model}
-                        </p>
-
-                        <p>
-                            🔢 ${driver.car_number}
-                        </p>
-
-                        <p>
-                            ⭐ ${driver.rating}
-                        </p>
-
-                        <a
-                            href="tel:${driver.phone}"
-                            style="
-                                display:block;
-                                margin-top:10px;
-                                text-align:center;
-                                background:#22c55e;
-                                color:white;
-                                padding:10px;
-                                border-radius:12px;
-                                text-decoration:none;
-                            "
-                        >
-                            📞 Qo‘ng‘iroq
-                        </a>
-
-                    </div>
-
-                    `
-
-                });
-
-                marker.addListener('click',()=>{
-
-                    infoWindow.open(map,marker);
-
-                });
-
-                markers[driver.id] = marker;
-
             }
 
         });
+
+    }
+
+    function smoothMoveMarker(marker,newPosition){
+
+        const oldPosition =
+            marker.getPosition();
+
+        let lat =
+            oldPosition.lat();
+
+        let lng =
+            oldPosition.lng();
+
+        const deltaLat =
+            (newPosition.lat - lat) / 60;
+
+        const deltaLng =
+            (newPosition.lng - lng) / 60;
+
+        let i = 0;
+
+        const interval = setInterval(()=>{
+
+            lat += deltaLat;
+
+            lng += deltaLng;
+
+            marker.setPosition({
+
+                lat:lat,
+                lng:lng
+
+            });
+
+            i++;
+
+            if(i >= 60){
+
+                clearInterval(interval);
+
+            }
+
+        },20);
 
     }
 
@@ -447,21 +423,13 @@
 
             <div class="buyurtma">
 
-                <p>
-                    👤 ${order.customer}
-                </p>
+                <p>👤 ${order.customer}</p>
 
-                <p>
-                    📍 ${order.from}
-                </p>
+                <p>📍 ${order.from}</p>
 
-                <p>
-                    🏁 ${order.to}
-                </p>
+                <p>🏁 ${order.to}</p>
 
-                <p>
-                    📦 ${order.status}
-                </p>
+                <p>📦 ${order.status}</p>
 
             </div>
 
@@ -482,6 +450,74 @@
         const to =
             document.getElementById('to').value;
 
+        if(!customer || !from || !to){
+
+            alert("Ma'lumotlarni to'ldiring");
+
+            return;
+        }
+        function calculatePrice(from,to){
+
+    const fakeDistance = Math.floor(
+
+        Math.random() * 15
+
+    ) + 3;
+
+    let price = 5000;
+
+    price += fakeDistance * 3000;
+
+    showNotification(
+
+        "💰 " +
+
+        price +
+
+        " so'm | 📍 " +
+
+        fakeDistance +
+
+        " KM"
+
+    );
+
+}
+function showNotification(text){
+
+    const div =
+        document.createElement('div');
+
+    div.innerHTML = text;
+
+    div.style.position = 'fixed';
+
+    div.style.top = '20px';
+
+    div.style.right = '20px';
+
+    div.style.background = '#22c55e';
+
+    div.style.color = 'white';
+
+    div.style.padding = '15px 20px';
+
+    div.style.borderRadius = '16px';
+
+    div.style.zIndex = '9999';
+
+    div.style.boxShadow =
+        '0 0 20px rgba(34,197,94,0.5)';
+
+    document.body.appendChild(div);
+
+    setTimeout(()=>{
+
+        div.remove();
+
+    },3000);
+
+}
         const response =
             await fetch('/create-order/',{
 
@@ -494,8 +530,14 @@
                 body:JSON.stringify({
 
                     customer:customer,
+
                     from:from,
-                    to:to
+
+                    to:to,
+
+                    passengers:1,
+
+                    taxi_type:'economy'
 
                 })
 
@@ -506,91 +548,17 @@
 
         if(data.success){
 
-            showNotification(
-                '🚖 Buyurtma yaratildi'
-            );
+    showNotification(
 
-            drawRoute(from,to);
+        "🚖 Buyurtma yaratildi"
 
-            loadOrders();
+    );
 
-        }
+    calculatePrice(from,to);
 
-    }
+    loadOrders();
 
-    function drawRoute(from,to){
-
-        directionsService.route({
-
-            origin:from,
-
-            destination:to,
-
-            travelMode:'DRIVING'
-
-        },(result,status)=>{
-
-            if(status === 'OK'){
-
-                directionsRenderer
-                    .setDirections(result);
-
-            }
-
-        });
-
-    }
-
-    function showNotification(text){
-
-        const div =
-            document.createElement('div');
-
-        div.innerHTML = text;
-
-        div.style.position = 'fixed';
-        div.style.top = '20px';
-        div.style.right = '20px';
-        div.style.background = '#22c55e';
-        div.style.color = 'white';
-        div.style.padding = '15px';
-        div.style.borderRadius = '12px';
-        div.style.boxShadow =
-            '0 0 20px rgba(34,197,94,0.7)';
-
-        document.body.appendChild(div);
-
-        setTimeout(()=>{
-
-            div.remove();
-
-        },3000);
-
-    }
-
-    function changeTheme(){
-
-        if(darkMode){
-
-            document.body.style.background =
-                'white';
-
-            document.body.style.color =
-                'black';
-
-            darkMode = false;
-
-        }else{
-
-            document.body.style.background =
-                '#0f172a';
-
-            document.body.style.color =
-                'white';
-
-            darkMode = true;
-
-        }
+}
 
     }
 
@@ -602,4 +570,3 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZuXRm4xb_ZR80kkfjl3gjEiQ
 
 </body>
 </html>
-

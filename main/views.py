@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+
 from .models import Driver, Order
 
 import random
@@ -47,7 +48,7 @@ def drivers_api(request):
 
     for driver in drivers:
 
-        # 🚖 Live Taxi Animation
+        # 🚖 Live Taxi Movement
         if driver.online:
 
             driver.latitude += random.uniform(
@@ -158,11 +159,11 @@ def create_order(request):
         min_distance = 999999
 
         drivers = Driver.objects.filter(
-
             status='online',
             online=True
-
         )
+
+        # 🤖 AI Taxi Tanlash
 
         for driver in drivers:
 
@@ -188,15 +189,22 @@ def create_order(request):
 
             to_location=data['to'],
 
-            passengers=data['passengers'],
+            passengers=data.get(
+                'passengers',
+                1
+            ),
 
-            taxi_type=data['taxi_type'],
+            taxi_type=data.get(
+                'taxi_type',
+                'economy'
+            ),
 
             status='pending'
 
         )
 
         # 🚖 Auto Driver
+
         if nearest_driver:
 
             order.driver = nearest_driver
@@ -231,7 +239,9 @@ def create_order(request):
 @csrf_exempt
 def accept_order(request, order_id):
 
-    order = Order.objects.get(id=order_id)
+    order = Order.objects.get(
+        id=order_id
+    )
 
     driver = Driver.objects.filter(
 
@@ -306,11 +316,8 @@ def toggle_driver_status(request):
 def driver_panel(request):
 
     return render(
-
         request,
-
         'driver.html'
-
     )
 
 
@@ -324,7 +331,9 @@ def register_view(request):
 
     if request.method == 'POST':
 
-        form = UserCreationForm(request.POST)
+        form = UserCreationForm(
+            request.POST
+        )
 
         if form.is_valid():
 
