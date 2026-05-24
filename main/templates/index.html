@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>🚖 SmartTaxi UZ</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial;
+        }
+
+        body{
+            display:flex;
+            background:#0f172a;
+            color:white;
+        }
+
+        .sidebar{
+            width:360px;
+            height:100vh;
+            overflow-y:auto;
+            background:#111827;
+            padding:20px;
+        }
+
+        .title{
+            font-size:30px;
+            color:#38bdf8;
+            margin-bottom:20px;
+        }
+
+        .card{
+            background:#1e293b;
+            padding:20px;
+            border-radius:20px;
+            margin-bottom:20px;
+        }
+
+        .number{
+            font-size:32px;
+            font-weight:bold;
+            margin-top:10px;
+        }
+
+        input,
+        select{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border:none;
+            border-radius:12px;
+            outline:none;
+            background:#334155;
+            color:white;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            margin-top:10px;
+            border:none;
+            border-radius:12px;
+            background:#38bdf8;
+            color:white;
+            cursor:pointer;
+            font-size:16px;
+        }
+
+        button:hover{
+            background:#0ea5e9;
+        }
+
+        .buyurtma{
+            background:#334155;
+            padding:12px;
+            border-radius:14px;
+            margin-top:12px;
+        }
+
+        #map{
+            flex:1;
+            height:100vh;
+        }
+
+        @media(max-width:900px){
+
+            body{
+                flex-direction:column;
+            }
+
+            .sidebar{
+                width:100%;
+                height:auto;
+            }
+
+            #map{
+                height:70vh;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <h1 class="title">
+        🚖 SmartTaxi UZ
+    </h1>
+
+    <button onclick="changeTheme()">
+        🌙 Theme
+    </button>
+
+    <div class="card">
+
+        <h2>🚕 Haydovchilar</h2>
+
+        <div class="number">
+            {{ drivers_count }}
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>🟢 Online</h2>
+
+        <div class="number">
+            {{ online_count }}
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>📦 Buyurtmalar</h2>
+
+        <div class="number">
+            {{ orders_count }}
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>🚖 Taxi chaqirish</h2>
+
+        <input
+            type="text"
+            id="customer"
+            placeholder="Mijoz ismi"
+        >
+
+        <select id="from">
+
+            <option value="">
+                📍 Qayerdan
+            </option>
+
+            <option value="Magic City">
+                Magic City
+            </option>
+
+            <option value="Chorsu">
+                Chorsu
+            </option>
+
+            <option value="Tashkent City">
+                Tashkent City
+            </option>
+
+        </select>
+
+        <select id="to">
+
+            <option value="">
+                🏁 Qayerga
+            </option>
+
+            <option value="Magic City">
+                Magic City
+            </option>
+
+            <option value="Chorsu">
+                Chorsu
+            </option>
+
+            <option value="Tashkent City">
+                Tashkent City
+            </option>
+
+        </select>
+
+        <button onclick="createOrder()">
+            🚖 Buyurtma
+        </button>
+
+    </div>
+
+    <div class="card">
+
+        <h2>📋 Jonli Buyurtmalar</h2>
+
+        <div id="orders"></div>
+
+    </div>
+
+</div>
+
+<div id="map"></div>
+
+<script>
+
+    let map;
+
+    let markers = {};
+
+    let directionsService;
+
+    let directionsRenderer;
+
+    let darkMode = true;
+
+    async function initMap(){
+
+        map = new google.maps.Map(
+
+            document.getElementById("map"),
+
+            {
+
+                zoom:13,
+
+                center:{
+                    lat:41.3111,
+                    lng:69.2797
+                },
+
+                styles:[
+
+                    {
+                        "elementType":"geometry",
+                        "stylers":[
+                            {
+                                "color":"#0f172a"
+                            }
+                        ]
+                    },
+
+                    {
+                        "elementType":"labels.text.fill",
+                        "stylers":[
+                            {
+                                "color":"#38bdf8"
+                            }
+                        ]
+                    },
+
+                    {
+                        "featureType":"road",
+                        "elementType":"geometry",
+                        "stylers":[
+                            {
+                                "color":"#1e293b"
+                            }
+                        ]
+                    }
+
+                ]
+
+            }
+
+        );
+
+        const trafficLayer =
+            new google.maps.TrafficLayer();
+
+        trafficLayer.setMap(map);
+
+        directionsService =
+            new google.maps.DirectionsService();
+
+        directionsRenderer =
+            new google.maps.DirectionsRenderer();
+
+        directionsRenderer.setMap(map);
+
+        loadDrivers();
+
+        loadOrders();
+
+        setInterval(()=>{
+
+            loadDrivers();
+
+            loadOrders();
+
+        },3000);
+
+    }
+
+    async function loadDrivers(){
+
+        const response =
+            await fetch('/drivers-api/');
+
+        const drivers =
+            await response.json();
+
+        drivers.forEach(driver => {
+
+            const position = {
+
+                lat:driver.lat,
+                lng:driver.lng
+
+            };
+
+            if(markers[driver.id]){
+
+                markers[driver.id]
+                    .setPosition(position);
+
+            }else{
+
+                const marker =
+                    new google.maps.Marker({
+
+                    position:position,
+
+                    map:map,
+
+                    title:driver.name,
+
+                    icon:{
+                        url:'https://cdn-icons-png.flaticon.com/512/3097/3097144.png',
+
+                        scaledSize:
+                            new google.maps.Size(55,55)
+                    }
+
+                });
+
+                const infoWindow =
+                    new google.maps.InfoWindow({
+
+                    content:`
+
+                    <div style="
+                        width:240px;
+                        padding:10px;
+                        color:black;
+                    ">
+
+                        <img
+                            src="${driver.photo}"
+                            width="100%"
+                            height="140"
+                            style="
+                                object-fit:cover;
+                                border-radius:16px;
+                            "
+                        >
+
+                        <h2>
+                            🚖 ${driver.name}
+                        </h2>
+
+                        <p>
+                            🚘 ${driver.car_model}
+                        </p>
+
+                        <p>
+                            🔢 ${driver.car_number}
+                        </p>
+
+                        <p>
+                            ⭐ ${driver.rating}
+                        </p>
+
+                        <a
+                            href="tel:${driver.phone}"
+                            style="
+                                display:block;
+                                margin-top:10px;
+                                text-align:center;
+                                background:#22c55e;
+                                color:white;
+                                padding:10px;
+                                border-radius:12px;
+                                text-decoration:none;
+                            "
+                        >
+                            📞 Qo‘ng‘iroq
+                        </a>
+
+                    </div>
+
+                    `
+
+                });
+
+                marker.addListener('click',()=>{
+
+                    infoWindow.open(map,marker);
+
+                });
+
+                markers[driver.id] = marker;
+
+            }
+
+        });
+
+    }
+
+    async function loadOrders(){
+
+        const response =
+            await fetch('/orders-api/');
+
+        const orders =
+            await response.json();
+
+        const ordersDiv =
+            document.getElementById('orders');
+
+        ordersDiv.innerHTML = '';
+
+        orders.forEach(order => {
+
+            ordersDiv.innerHTML += `
+
+            <div class="buyurtma">
+
+                <p>
+                    👤 ${order.customer}
+                </p>
+
+                <p>
+                    📍 ${order.from}
+                </p>
+
+                <p>
+                    🏁 ${order.to}
+                </p>
+
+                <p>
+                    📦 ${order.status}
+                </p>
+
+            </div>
+
+            `;
+
+        });
+
+    }
+
+    async function createOrder(){
+
+        const customer =
+            document.getElementById('customer').value;
+
+        const from =
+            document.getElementById('from').value;
+
+        const to =
+            document.getElementById('to').value;
+
+        const response =
+            await fetch('/create-order/',{
+
+                method:'POST',
+
+                headers:{
+                    'Content-Type':'application/json'
+                },
+
+                body:JSON.stringify({
+
+                    customer:customer,
+                    from:from,
+                    to:to
+
+                })
+
+            });
+
+        const data =
+            await response.json();
+
+        if(data.success){
+
+            showNotification(
+                '🚖 Buyurtma yaratildi'
+            );
+
+            drawRoute(from,to);
+
+            loadOrders();
+
+        }
+
+    }
+
+    function drawRoute(from,to){
+
+        directionsService.route({
+
+            origin:from,
+
+            destination:to,
+
+            travelMode:'DRIVING'
+
+        },(result,status)=>{
+
+            if(status === 'OK'){
+
+                directionsRenderer
+                    .setDirections(result);
+
+            }
+
+        });
+
+    }
+
+    function showNotification(text){
+
+        const div =
+            document.createElement('div');
+
+        div.innerHTML = text;
+
+        div.style.position = 'fixed';
+        div.style.top = '20px';
+        div.style.right = '20px';
+        div.style.background = '#22c55e';
+        div.style.color = 'white';
+        div.style.padding = '15px';
+        div.style.borderRadius = '12px';
+        div.style.boxShadow =
+            '0 0 20px rgba(34,197,94,0.7)';
+
+        document.body.appendChild(div);
+
+        setTimeout(()=>{
+
+            div.remove();
+
+        },3000);
+
+    }
+
+    function changeTheme(){
+
+        if(darkMode){
+
+            document.body.style.background =
+                'white';
+
+            document.body.style.color =
+                'black';
+
+            darkMode = false;
+
+        }else{
+
+            document.body.style.background =
+                '#0f172a';
+
+            document.body.style.color =
+                'white';
+
+            darkMode = true;
+
+        }
+
+    }
+
+</script>
+
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZuXRm4xb_ZR80kkfjl3gjEiQmHVIF9UQ&callback=initMap">
+</script>
+
+</body>
+</html>
+

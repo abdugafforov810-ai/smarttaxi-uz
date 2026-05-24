@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>📝 SmartTaxi Register</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:#020617;
+            overflow:hidden;
+            color:white;
+        }
+
+        body::before{
+            content:'';
+            position:absolute;
+            width:700px;
+            height:700px;
+            background:#06b6d4;
+            border-radius:50%;
+            filter:blur(250px);
+            opacity:0.2;
+            top:-200px;
+            left:-200px;
+        }
+
+        body::after{
+            content:'';
+            position:absolute;
+            width:700px;
+            height:700px;
+            background:#2563eb;
+            border-radius:50%;
+            filter:blur(250px);
+            opacity:0.2;
+            bottom:-250px;
+            right:-200px;
+        }
+
+        .container{
+            width:1100px;
+            max-width:95%;
+            min-height:720px;
+            display:flex;
+            border-radius:35px;
+            overflow:hidden;
+            background:rgba(15,23,42,0.88);
+            backdrop-filter:blur(20px);
+            border:1px solid rgba(255,255,255,0.08);
+            box-shadow:
+                0 0 40px rgba(14,165,233,0.25);
+            position:relative;
+            z-index:10;
+        }
+
+        .left{
+
+            width:50%;
+            padding:60px;
+
+            background:
+                linear-gradient(
+                    rgba(2,6,23,0.85),
+                    rgba(2,6,23,0.9)
+                ),
+                url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=1600&auto=format&fit=crop');
+
+            background-size:cover;
+            background-position:center;
+
+            display:flex;
+            flex-direction:column;
+            justify-content:space-between;
+        }
+
+        .logo{
+            font-size:55px;
+            font-weight:700;
+            color:#38bdf8;
+        }
+
+        .logo span{
+            color:white;
+        }
+
+        .title h1{
+            font-size:58px;
+            line-height:1.1;
+            margin-bottom:20px;
+        }
+
+        .title p{
+            font-size:22px;
+            color:#cbd5e1;
+        }
+
+        .stats{
+            display:flex;
+            gap:20px;
+        }
+
+        .stat-box{
+            flex:1;
+            padding:20px;
+            border-radius:20px;
+            background:rgba(255,255,255,0.08);
+            border:1px solid rgba(255,255,255,0.08);
+        }
+
+        .stat-box h2{
+            color:#38bdf8;
+            font-size:32px;
+        }
+
+        .stat-box p{
+            margin-top:8px;
+            color:#e2e8f0;
+        }
+
+        .right{
+            width:50%;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            padding:50px;
+        }
+
+        .register-box{
+            width:100%;
+            max-width:430px;
+        }
+
+        .icon{
+            width:120px;
+            height:120px;
+            border-radius:50%;
+            border:2px solid rgba(56,189,248,0.3);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            margin:auto;
+            margin-bottom:30px;
+            font-size:60px;
+            color:#38bdf8;
+            box-shadow:
+                0 0 30px rgba(56,189,248,0.25);
+        }
+
+        .register-box h1{
+            text-align:center;
+            font-size:45px;
+            margin-bottom:10px;
+        }
+
+        .register-box p{
+            text-align:center;
+            color:#94a3b8;
+            margin-bottom:40px;
+        }
+
+        .input-box{
+            margin-bottom:20px;
+        }
+
+        .input-box label{
+            display:block;
+            margin-bottom:10px;
+            color:#e2e8f0;
+        }
+
+        .input-box input{
+            width:100%;
+            padding:18px;
+            border:none;
+            outline:none;
+            border-radius:16px;
+            background:#0f172a;
+            color:white;
+            font-size:16px;
+            border:1px solid rgba(255,255,255,0.08);
+        }
+
+        .input-box input:focus{
+            border:1px solid #38bdf8;
+            box-shadow:
+                0 0 20px rgba(56,189,248,0.2);
+        }
+
+        .btn{
+            width:100%;
+            padding:18px;
+            border:none;
+            border-radius:16px;
+            background:
+                linear-gradient(
+                    90deg,
+                    #06b6d4,
+                    #2563eb
+                );
+
+            color:white;
+            font-size:20px;
+            cursor:pointer;
+            font-weight:600;
+            margin-top:10px;
+            transition:0.3s;
+        }
+
+        .btn:hover{
+            transform:translateY(-3px);
+            box-shadow:
+                0 10px 25px rgba(37,99,235,0.4);
+        }
+
+        .bottom{
+            text-align:center;
+            margin-top:25px;
+            color:#94a3b8;
+        }
+
+        .bottom a{
+            color:#38bdf8;
+            text-decoration:none;
+            font-weight:600;
+        }
+
+        @media(max-width:900px){
+
+            .container{
+                flex-direction:column;
+            }
+
+            .left,
+            .right{
+                width:100%;
+            }
+
+            .left{
+                min-height:350px;
+            }
+
+            .title h1{
+                font-size:40px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="left">
+
+        <div>
+
+            <div class="logo">
+                🚖 SMART<span>TAXI</span>
+            </div>
+
+            <div class="title">
+
+                <h1>
+                    BIR ZUMDA.<br>
+                    XAVFSIZ.<br>
+                    QULAY.
+                </h1>
+
+                <p>
+                    SmartTaxi UZ bilan
+                    premium taxi tizimiga qo‘shiling 🚀
+                </p>
+
+            </div>
+
+        </div>
+
+        <div class="stats">
+
+            <div class="stat-box">
+
+                <h2>1000+</h2>
+
+                <p>Faol Driver</p>
+
+            </div>
+
+            <div class="stat-box">
+
+                <h2>5000+</h2>
+
+                <p>Buyurtmalar</p>
+
+            </div>
+
+            <div class="stat-box">
+
+                <h2>4.9 ⭐</h2>
+
+                <p>Reyting</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="right">
+
+        <div class="register-box">
+
+            <div class="icon">
+                📝
+            </div>
+
+            <h1>
+                Ro‘yxatdan o‘tish
+            </h1>
+
+            <p>
+                SmartTaxi tizimiga qo‘shiling
+                va foydalanishni boshlang
+            </p>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="input-box">
+
+                    <label>
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Username kiriting"
+                    >
+
+                </div>
+
+                <div class="input-box">
+
+                    <label>
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password1"
+                        placeholder="Password kiriting"
+                    >
+
+                </div>
+
+                <div class="input-box">
+
+                    <label>
+                        Password tasdiqlash
+                    </label>
+
+                    <input
+                        type="password"
+                        name="password2"
+                        placeholder="Passwordni qayta kiriting"
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Ro‘yxatdan o‘tish 🚀
+                </button>
+
+            </form>
+
+            <div class="bottom">
+
+                Hisobingiz bormi?
+
+                <a href="/login/">
+                    Login qilish
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
