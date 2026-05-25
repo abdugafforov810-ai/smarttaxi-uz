@@ -63,8 +63,6 @@
             padding:22px;
 
             margin-bottom:20px;
-
-            animation:fade 0.5s ease;
         }
 
         .card h2{
@@ -75,6 +73,7 @@
 
             font-size:42px;
             font-weight:bold;
+
             color:#38bdf8;
         }
 
@@ -155,20 +154,6 @@
             margin-top:8px;
         }
 
-        @keyframes fade{
-
-            from{
-                opacity:0;
-                transform:translateY(20px);
-            }
-
-            to{
-                opacity:1;
-                transform:translateY(0);
-            }
-
-        }
-
     </style>
 
 </head>
@@ -211,6 +196,8 @@
 
     </div>
 
+    <!-- TAXI ORDER -->
+
     <div class="card">
 
         <h2>🚖 Taxi chaqirish</h2>
@@ -221,21 +208,63 @@
             placeholder="Mijoz ismi"
         >
 
+        <!-- FROM -->
+
         <select id="from">
 
             <option value="">
                 📍 Qayerdan
             </option>
 
-            <option value="Magic City">
-                Magic City
-            </option>
-
-            <option value="Chorsu">
-                Chorsu
-            </option>
+            <option>Tashkent City</option>
+            <option>Magic City</option>
+            <option>Chorsu</option>
+            <option>Airport</option>
+            <option>Minor</option>
+            <option>Next Mall</option>
+            <option>Compass Mall</option>
+            <option>Mega Planet</option>
+            <option>Samarqand Darvoza</option>
+            <option>Beruniy Metro</option>
+            <option>Buyuk Ipak Yo‘li</option>
+            <option>Qo‘yliq Bozori</option>
+            <option>Malika Bozori</option>
+            <option>Farhod Bozori</option>
+            <option>Abu Saxiy</option>
+            <option>Oloy Bozori</option>
+            <option>Yunusobod</option>
+            <option>Chilonzor</option>
+            <option>Olmazor</option>
+            <option>Mirobod</option>
+            <option>Sergeli</option>
+            <option>Yakkasaroy</option>
+            <option>Shayxontohur</option>
+            <option>Mirzo Ulug‘bek</option>
+            <option>Bektemir</option>
+            <option>Uchtepa</option>
+            <option>Turkiston Metro</option>
+            <option>Paxtakor Metro</option>
+            <option>Kosmonavtlar Metro</option>
+            <option>Alisher Navoiy Metro</option>
+            <option>Amir Temur Xiyoboni</option>
+            <option>Toshkent TV Tower</option>
+            <option>Milliy Bog‘</option>
+            <option>Seoul Mun</option>
+            <option>Anhor Lokomotiv</option>
+            <option>Lokomotiv Park</option>
+            <option>Botanika Bog‘i</option>
+            <option>Magic Aquarium</option>
+            <option>Toshkent Zoo</option>
+            <option>Humo Arena</option>
+            <option>Bunyodkor Stadium</option>
+            <option>UzExpo Center</option>
+            <option>Hilton Tashkent</option>
+            <option>City Palace Hotel</option>
+            <option>Wyndham Hotel</option>
 
         </select>
+
+        <!-- TO -->
 
         <select id="to">
 
@@ -243,13 +272,51 @@
                 🏁 Qayerga
             </option>
 
-            <option value="Tashkent City">
-                Tashkent City
-            </option>
-
-            <option value="Airport">
-                Airport
-            </option>
+            <option>Tashkent City</option>
+            <option>Magic City</option>
+            <option>Chorsu</option>
+            <option>Airport</option>
+            <option>Minor</option>
+            <option>Next Mall</option>
+            <option>Compass Mall</option>
+            <option>Mega Planet</option>
+            <option>Samarqand Darvoza</option>
+            <option>Beruniy Metro</option>
+            <option>Buyuk Ipak Yo‘li</option>
+            <option>Qo‘yliq Bozori</option>
+            <option>Malika Bozori</option>
+            <option>Farhod Bozori</option>
+            <option>Abu Saxiy</option>
+            <option>Oloy Bozori</option>
+            <option>Yunusobod</option>
+            <option>Chilonzor</option>
+            <option>Olmazor</option>
+            <option>Mirobod</option>
+            <option>Sergeli</option>
+            <option>Yakkasaroy</option>
+            <option>Shayxontohur</option>
+            <option>Mirzo Ulug‘bek</option>
+            <option>Bektemir</option>
+            <option>Uchtepa</option>
+            <option>Turkiston Metro</option>
+            <option>Paxtakor Metro</option>
+            <option>Kosmonavtlar Metro</option>
+            <option>Alisher Navoiy Metro</option>
+            <option>Amir Temur Xiyoboni</option>
+            <option>Toshkent TV Tower</option>
+            <option>Milliy Bog‘</option>
+            <option>Seoul Mun</option>
+            <option>Anhor Lokomotiv</option>
+            <option>Lokomotiv Park</option>
+            <option>Botanika Bog‘i</option>
+            <option>Magic Aquarium</option>
+            <option>Toshkent Zoo</option>
+            <option>Humo Arena</option>
+            <option>Bunyodkor Stadium</option>
+            <option>UzExpo Center</option>
+            <option>Hilton Tashkent</option>
+            <option>City Palace Hotel</option>
+            <option>Wyndham Hotel</option>
 
         </select>
 
@@ -274,7 +341,6 @@
 <script>
 
     let map;
-
     let markers = {};
 
     async function initMap(){
@@ -284,26 +350,22 @@
             document.getElementById("map"),
 
             {
-
                 zoom:13,
 
                 center:{
                     lat:41.3111,
                     lng:69.2797
                 }
-
             }
 
         );
 
         loadDrivers();
-
         loadOrders();
 
         setInterval(()=>{
 
             loadDrivers();
-
             loadOrders();
 
         },3000);
@@ -329,10 +391,8 @@
 
             if(markers[driver.id]){
 
-                smoothMoveMarker(
-                    markers[driver.id],
-                    position
-                );
+                markers[driver.id]
+                    .setPosition(position);
 
             }else{
 
@@ -349,7 +409,7 @@
                         url:'https://cdn-icons-png.flaticon.com/512/3097/3097144.png',
 
                         scaledSize:
-                            new google.maps.Size(55,55)
+                        new google.maps.Size(55,55)
                     }
 
                 });
@@ -357,50 +417,6 @@
             }
 
         });
-
-    }
-
-    function smoothMoveMarker(marker,newPosition){
-
-        const oldPosition =
-            marker.getPosition();
-
-        let lat =
-            oldPosition.lat();
-
-        let lng =
-            oldPosition.lng();
-
-        const deltaLat =
-            (newPosition.lat - lat) / 60;
-
-        const deltaLng =
-            (newPosition.lng - lng) / 60;
-
-        let i = 0;
-
-        const interval = setInterval(()=>{
-
-            lat += deltaLat;
-
-            lng += deltaLng;
-
-            marker.setPosition({
-
-                lat:lat,
-                lng:lng
-
-            });
-
-            i++;
-
-            if(i >= 60){
-
-                clearInterval(interval);
-
-            }
-
-        },20);
 
     }
 
@@ -439,6 +455,37 @@
 
     }
 
+    function showNotification(text){
+
+        const div =
+            document.createElement('div');
+
+        div.innerHTML = text;
+
+        div.style.position = 'fixed';
+
+        div.style.top = '20px';
+
+        div.style.right = '20px';
+
+        div.style.background = '#22c55e';
+
+        div.style.padding = '15px 20px';
+
+        div.style.borderRadius = '16px';
+
+        div.style.zIndex = '9999';
+
+        document.body.appendChild(div);
+
+        setTimeout(()=>{
+
+            div.remove();
+
+        },3000);
+
+    }
+
     async function createOrder(){
 
         const customer =
@@ -456,68 +503,7 @@
 
             return;
         }
-        function calculatePrice(from,to){
 
-    const fakeDistance = Math.floor(
-
-        Math.random() * 15
-
-    ) + 3;
-
-    let price = 5000;
-
-    price += fakeDistance * 3000;
-
-    showNotification(
-
-        "💰 " +
-
-        price +
-
-        " so'm | 📍 " +
-
-        fakeDistance +
-
-        " KM"
-
-    );
-
-}
-function showNotification(text){
-
-    const div =
-        document.createElement('div');
-
-    div.innerHTML = text;
-
-    div.style.position = 'fixed';
-
-    div.style.top = '20px';
-
-    div.style.right = '20px';
-
-    div.style.background = '#22c55e';
-
-    div.style.color = 'white';
-
-    div.style.padding = '15px 20px';
-
-    div.style.borderRadius = '16px';
-
-    div.style.zIndex = '9999';
-
-    div.style.boxShadow =
-        '0 0 20px rgba(34,197,94,0.5)';
-
-    document.body.appendChild(div);
-
-    setTimeout(()=>{
-
-        div.remove();
-
-    },3000);
-
-}
         const response =
             await fetch('/create-order/',{
 
@@ -530,13 +516,9 @@ function showNotification(text){
                 body:JSON.stringify({
 
                     customer:customer,
-
                     from:from,
-
                     to:to,
-
                     passengers:1,
-
                     taxi_type:'economy'
 
                 })
@@ -548,23 +530,19 @@ function showNotification(text){
 
         if(data.success){
 
-    showNotification(
+            showNotification(
+                "🚖 Buyurtma yaratildi"
+            );
 
-        "🚖 Buyurtma yaratildi"
+            loadOrders();
 
-    );
-
-    calculatePrice(from,to);
-
-    loadOrders();
-
-}
+        }
 
     }
 
 </script>
 
-<script async defer
+<script async deferc
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZuXRm4xb_ZR80kkfjl3gjEiQmHVIF9UQ&callback=initMap">
 </script>
 
