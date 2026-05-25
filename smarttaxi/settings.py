@@ -1,7 +1,15 @@
 from pathlib import Path
 
+# =========================
+# BASE DIR
+# =========================
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+# =========================
+# SECURITY
+# =========================
 
 SECRET_KEY = 'django-insecure-smarttaxi'
 
@@ -13,6 +21,10 @@ ALLOWED_HOSTS = [
     "localhost",
 ]
 
+
+# =========================
+# INSTALLED APPS
+# =========================
 
 INSTALLED_APPS = [
 
@@ -28,6 +40,10 @@ INSTALLED_APPS = [
     'main',
 ]
 
+
+# =========================
+# MIDDLEWARE
+# =========================
 
 MIDDLEWARE = [
 
@@ -49,8 +65,16 @@ MIDDLEWARE = [
 ]
 
 
+# =========================
+# URLS
+# =========================
+
 ROOT_URLCONF = 'smarttaxi.urls'
 
+
+# =========================
+# TEMPLATES
+# =========================
 
 TEMPLATES = [
     {
@@ -75,8 +99,16 @@ TEMPLATES = [
 ]
 
 
+# =========================
+# WSGI
+# =========================
+
 WSGI_APPLICATION = 'smarttaxi.wsgi.application'
 
+
+# =========================
+# DATABASE
+# =========================
 
 DATABASES = {
     'default': {
@@ -87,8 +119,16 @@ DATABASES = {
 }
 
 
+# =========================
+# PASSWORD VALIDATION
+# =========================
+
 AUTH_PASSWORD_VALIDATORS = []
 
+
+# =========================
+# LANGUAGE
+# =========================
 
 LANGUAGE_CODE = 'uz'
 
@@ -99,10 +139,20 @@ USE_I18N = True
 USE_TZ = True
 
 
+# =========================
+# STATIC FILES
+# =========================
+
 STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+# =========================
+# LOGIN
+# =========================
 
 LOGIN_URL = '/login/'
 
@@ -110,5 +160,9 @@ LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/login/'
 
+
+# =========================
+# DEFAULT AUTO FIELD
+# =========================
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
