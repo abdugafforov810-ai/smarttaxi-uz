@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 
 from .models import Driver, Order
 
@@ -15,6 +16,7 @@ import math
 # HOME PAGE
 # =========================
 
+@login_required
 def home(request):
 
     context = {
@@ -48,7 +50,6 @@ def drivers_api(request):
 
     for driver in drivers:
 
-        # 🚖 Live Taxi Movement
         if driver.online:
 
             driver.latitude += random.uniform(
@@ -121,10 +122,6 @@ def orders_api(request):
 
             'status': order.status,
 
-            'taxi_type': order.taxi_type,
-
-            'passengers': order.passengers,
-
             'driver': (
 
                 order.driver.name
@@ -159,11 +156,8 @@ def create_order(request):
         min_distance = 999999
 
         drivers = Driver.objects.filter(
-            status='online',
             online=True
         )
-
-        # 🤖 AI Taxi Tanlash
 
         for driver in drivers:
 
@@ -189,39 +183,19 @@ def create_order(request):
 
             to_location=data['to'],
 
-            passengers=data.get(
-                'passengers',
-                1
-            ),
-
-            taxi_type=data.get(
-                'taxi_type',
-                'economy'
-            ),
-
-            status='pending'
+            status='accepted'
 
         )
-
-        # 🚖 Auto Driver
 
         if nearest_driver:
 
             order.driver = nearest_driver
 
-            order.status = 'accepted'
-
             order.save()
 
-            nearest_driver.status = 'busy'
-
-            nearest_driver.save()
-
         return JsonResponse({
 
-            'success': True,
-
-            'order_id': order.id
+            'success': True
 
         })
 
@@ -230,95 +204,6 @@ def create_order(request):
         'success': False
 
     })
-
-
-# =========================
-# ACCEPT ORDER
-# =========================
-
-@csrf_exempt
-def accept_order(request, order_id):
-
-    order = Order.objects.get(
-        id=order_id
-    )
-
-    driver = Driver.objects.filter(
-
-        status='online',
-        online=True
-
-    ).first()
-
-    if driver:
-
-        order.driver = driver
-
-        order.status = 'accepted'
-
-        order.save()
-
-        driver.status = 'busy'
-
-        driver.save()
-
-        return JsonResponse({
-
-            'success': True,
-
-            'driver': driver.name
-
-        })
-
-    return JsonResponse({
-
-        'success': False
-
-    })
-
-
-# =========================
-# DRIVER STATUS
-# =========================
-
-@csrf_exempt
-def toggle_driver_status(request):
-
-    driver = Driver.objects.first()
-
-    if driver.online:
-
-        driver.online = False
-
-        driver.status = 'offline'
-
-    else:
-
-        driver.online = True
-
-        driver.status = 'online'
-
-    driver.save()
-
-    return JsonResponse({
-
-        'success': True,
-
-        'online': driver.online
-
-    })
-
-
-# =========================
-# DRIVER PANEL
-# =========================
-
-def driver_panel(request):
-
-    return render(
-        request,
-        'driver.html'
-    )
 
 
 # =========================
